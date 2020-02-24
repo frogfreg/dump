@@ -1,18 +1,34 @@
-const btn = document.querySelector("button");
-btn.addEventListener("mouseover", function() {
-  let { width, height } = randomLocation();
-  btn.style.left = `${width}px`;
-  btn.style.top = `${height}px`;
-});
+// const colors = [
+//   "red",
+//   "orange",
+//   "yellow",
+//   "green",
+//   "blue",
+//   "purple",
+//   "indigo",
+//   "violet"
+// ];
+const colors = [];
+const changeColor = function() {
+  const h1 = document.querySelector("h1");
+  h1.style.color = this.style.backgroundColor;
+};
+function randomColor() {
+  let r = Math.floor(Math.random() * 256);
+  let g = Math.floor(Math.random() * 256);
+  let b = Math.floor(Math.random() * 256);
+  return { r, g, b };
+}
+for (let i = 0; i <= 8; i++) {
+  let { r, g, b } = randomColor();
+  colors.push(`rgb(${r},${g},${b})`);
+}
 
-btn.addEventListener("click", function() {
-  btn.innerText = "You got me, cowboy";
-  document.body.style.backgroundColor = "#9147FF";
-});
-
-function randomLocation() {
-  let randomX = Math.floor(Math.random() * window.innerWidth);
-  let randomY = Math.floor(Math.random() * window.innerHeight);
-
-  return { width: randomX, height: randomY };
+const container = document.querySelector("#boxes");
+for (let color of colors) {
+  const box = document.createElement("div");
+  box.style.backgroundColor = color;
+  box.classList.add("box");
+  container.append(box);
+  box.addEventListener("click", changeColor);
 }
