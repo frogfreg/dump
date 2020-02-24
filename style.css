@@ -1,12 +1,5 @@
-.todo {
-  font-size: 30px;
-  color: olive;
-}
-.great {
-  color: #2878e0;
-}
-.done {
-  color: gray;
-  text-decoration: line-through;
-  opacity: 50%;
+button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }
