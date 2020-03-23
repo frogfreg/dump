@@ -1,12 +1,14 @@
-#boxes {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+body {
+  /* display: flex;
+    align-items: center; */
+  align-content: center;
+  background-color: #7684a6;
+  color: #d8e6e4;
 }
-.box {
-  width: 200px;
-  height: 200px;
-}
-h1 {
-  text-align: center;
+div{
+    width: 20%;
+    height: 15%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
 }
