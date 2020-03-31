@@ -1,38 +1,23 @@
-class Timer {
-  constructor(durationInput, startButton, pauseButton) {
-    this.durationInput = durationInput;
-    this.startButton = startButton;
-    this.pauseButton = pauseButton;
-
-    this.startButton.addEventListener("click", this.start);
-    this.pauseButton.addEventListener("click", this.pause);
-  }
-  start = () => {
-    this.tick();
-    this.interval = setInterval(this.tick, 1000);
-  };
-  tick = () => {
-    if (this.timeRemaining <= 0) {
-      this.pause();
-    } else {
-      this.timeRemaining = this.timeRemaining - 1;
-    }
-  };
-  pause = () => {
-    clearInterval(this.interval);
-    console.log("Timer has stopped");
-  };
-
-  get timeRemaining() {
-    return parseFloat(this.durationInput.value);
-  }
-  set timeRemaining(time) {
-    this.durationInput.value = time;
-  }
-}
-
 const startButton = document.querySelector("#start");
 const pauseButton = document.querySelector("#pause");
 const durationInput = document.querySelector("#duration");
+const circle = document.querySelector("circle");
+const perimeter = circle.getAttribute("r") * 2 * Math.PI;
+circle.setAttribute("stroke-dasharray", perimeter);
 
-const timer = new Timer(durationInput, startButton, pauseButton);
+let duration;
+const timer = new Timer(durationInput, startButton, pauseButton, {
+  onStart(totalDuration) {
+    console.log("Time started");
+    duration = totalDuration;
+  },
+  onTick(timeRemaining) {
+    circle.setAttribute(
+      "stroke-dashoffset",
+      (perimeter * timeRemaining) / duration - perimeter
+    );
+  },
+  onComplete() {
+    console.log("Timer is completed");
+  }
+});
