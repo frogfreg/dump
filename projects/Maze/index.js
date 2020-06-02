@@ -3,6 +3,7 @@ const { Engine, Render, Runner, World, Bodies } = Matter;
 const width = 600;
 const height = 600;
 const cells = 3;
+const unitLength = width / cells;
 
 const engine = Engine.create();
 const { world } = engine;
@@ -67,11 +68,70 @@ const searchPath = (row, column) => {
   grid[row][column] = true;
 
   const neighbors = shuffle([
-    [row - 1, column],
-    [row, column + 1],
-    [row + 1, column],
-    [row, column - 1],
+    [row - 1, column, "up"],
+    [row, column + 1, "right"],
+    [row + 1, column, "down"],
+    [row, column - 1, "left"],
   ]);
+  for (let neighbor of neighbors) {
+    const [nextRow, nextColumn, direction] = neighbor;
+    if (
+      nextRow < 0 ||
+      nextRow >= cells ||
+      nextColumn < 0 ||
+      nextColumn >= cells
+    ) {
+      continue;
+    }
+    if (grid[nextRow][nextColumn]) {
+      continue;
+    }
+    if (direction === "left") {
+      verticals[row][column - 1] = true;
+    } else if (direction === "right") {
+      verticals[row][column] = true;
+    } else if (direction === "up") {
+      console.log(row, column);
+      horizontals[row - 1][column] = true;
+    } else if (direction === "down") {
+      console.log(row, column);
+      horizontals[row][column] = true;
+    }
+    searchPath(nextRow, nextColumn);
+  }
 };
 
-searchPath(1, 1);
+searchPath(startRow, startColumn);
+horizontals.forEach((row, rowIndex) => {
+  row.forEach((open, columnIndex) => {
+    if (open) {
+      return;
+    }
+
+    const wall = Bodies.rectangle(
+      columnIndex * unitLength + unitLength / 2,
+      rowIndex * unitLength + unitLength,
+      unitLength,
+      10,
+      { isStatic: true }
+    );
+    World.add(world, wall);
+  });
+});
+
+verticals.forEach((row, rowIndex) => {
+  row.forEach((open, columnIndex) => {
+    if (open) {
+      return;
+    }
+
+    const wall = Bodies.rectangle(
+      columnIndex * unitLength + unitLength,
+      rowIndex * unitLength + unitLength / 2,
+      10,
+      unitLength,
+      { isStatic: true }
+    );
+    World.add(world, wall);
+  });
+});
